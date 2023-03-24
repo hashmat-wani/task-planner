@@ -1,6 +1,6 @@
 import Joi from "joi";
 import bcrypt from "bcrypt";
-import { User } from "../../models/index.js";
+import { User, Sprint } from "../../models/index.js";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -9,6 +9,7 @@ import {
   JWT_REFRESH_SECRET,
   MODE,
 } from "../../utils/env.js";
+import { JwtService } from "../../services/index.js";
 
 export const loginController = {
   async login(req, res, next) {
@@ -102,6 +103,12 @@ export const loginController = {
           password,
           avatar,
           verified: true,
+        });
+
+        await Sprint.create({
+          name: "Sprint 1",
+          slug: "sprint-1",
+          user: user._id,
         });
       }
 

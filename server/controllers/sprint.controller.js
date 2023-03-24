@@ -1,17 +1,18 @@
 import { Sprint } from "../models/index.js";
 
 export const sprintController = {
-  async getAllSprints() {
+  async getAllSprints(req, res, next) {
     try {
-      const { _id: userId } = req?.user;
-      const sprints = await Sprint.find({ user: userId });
+      // const { _id: userId } = req?.user;
+      // const sprints = await Sprint.find({ user: userId });
+      const sprints = await Sprint.find();
       res.status(200).json({ status: "success", data: sprints });
     } catch (err) {
       next(err);
     }
   },
 
-  async addSprint() {
+  async addSprint(req, res, next) {
     try {
       const { _id } = req?.user;
       const { name } = req?.body;

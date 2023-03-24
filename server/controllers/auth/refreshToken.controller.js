@@ -1,4 +1,5 @@
 import { User } from "../../models/index.js";
+import { JwtService } from "../../services/index.js";
 
 export const refreshTokenController = {
   async refresh(req, res, next) {

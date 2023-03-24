@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { User } from "../../models/index.js";
+import { User,Sprint } from "../../models/index.js";
 import bcrypt from "bcrypt";
 import { CustomErrorHandler } from "../../services/index.js";
 
@@ -39,6 +39,12 @@ export const registerController = {
       };
 
       const user = await User.create(payload);
+
+      await Sprint.create({
+        name: "Sprint 1",
+        slug: "sprint-1",
+        user: user._id,
+      });
 
       res.status(201).json({
         success: true,

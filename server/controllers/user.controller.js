@@ -19,41 +19,6 @@ export const userController = {
     }
   },
 
-  async changePassword(req, res, next) {
-    // validation
-    const validationSchema = Joi.object({
-      oldPassword: Joi.string().required(),
-      newPassword: Joi.string().required(),
-    });
-
-    const { error } = validationSchema.validate(req.body);
-
-    if (error) {
-      return next(error);
-    }
-
-    try {
-      const { _id: userId } = req.user;
-      const { oldPassword, newPassword } = req.body;
-      const user = await User.findById(userId);
-      const match = await bcrypt.compare(oldPassword, user.password);
-      if (!match) {
-        return next(
-          CustomErrorHandler.invalidCredentials("Wrong old password!")
-        );
-      }
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      await User.findByIdAndUpdate(userId, { password: hashedPassword });
-
-      return res.status(201).json({
-        success: true,
-        message: "Password changed successfully. Please login again..!",
-      });
-    } catch (err) {
-      return next(err);
-    }
-  },
-
   async resetPassword(req, res, next) {
     // validation
     const { newPassword } = req.body;

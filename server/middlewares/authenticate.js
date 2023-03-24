@@ -1,12 +1,12 @@
 import redis from "../config/redis.js";
-import CustomErrorHandler from "../services/CustomErrorHandler.js";
-import JwtService from "../services/JwtService.js";
+import { JwtService, CustomErrorHandler } from "../services/index.js";
 
 export const authenticate = async (req, res, next) => {
   try {
     const access_token = req.cookies?.access_token?.split(" ")[1];
     const blacklist = await redis.lrange("blacklist", 0, -1);
 
+    console.log(access_token);
     if (!access_token || blacklist.includes(access_token)) {
       return next(CustomErrorHandler.unAuthorised());
     }

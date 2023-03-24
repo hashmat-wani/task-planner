@@ -1,6 +1,13 @@
 import express from "express";
 import cors from "cors";
-import { APP_PORT, DEV_API, MODE, PROD_API } from "./utils/env.js";
+import {
+  APP_PORT,
+  CLIENT_DEV_API,
+  CLIENT_PROD_API,
+  DEV_API,
+  MODE,
+  PROD_API,
+} from "./utils/env.js";
 import {
   sprintRoute,
   taskRoute,
@@ -9,11 +16,21 @@ import {
 } from "./routes/index.js";
 import { connectDB, redis } from "./config/index.js";
 import { errorHandler } from "./middlewares/index.js";
+import cookieParser from "cookie-parser";
+
+const PORT = APP_PORT || 3000;
 
 const app = express();
 
-const PORT = APP_PORT || 3000;
-app.use(cors());
+app.use(cookieParser());
+
+const corsOptions = {
+  origin: `${MODE === "dev" ? CLIENT_DEV_API : CLIENT_PROD_API}`,
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+  methods: "GET,POST,PUT,DELETE,PATCH",
+};
+app.use(cors(corsOptions));
 
 // console.log(await redis.llen("blacklist"));
 

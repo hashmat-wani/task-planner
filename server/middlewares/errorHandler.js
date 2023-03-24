@@ -1,5 +1,6 @@
-import CustomErrorHandler from "../services/CustomErrorHandler.js";
+import { CustomErrorHandler } from "../services/index.js";
 import pkg from "joi";
+import { MODE } from "../utils/env.js";
 const { ValidationError } = pkg;
 
 export const errorHandler = (err, req, res, next) => {

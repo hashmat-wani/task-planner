@@ -1,5 +1,5 @@
 export const taskController = {
-  async getSprintTasks() {},
+  async getSprintTasks(req,res,next) {},
 
-  async addTask() {},
+  async addTask(req,res,next) {},
 };

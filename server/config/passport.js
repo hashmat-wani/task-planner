@@ -7,6 +7,7 @@ import {
   MODE,
   PROD_API,
 } from "../utils/env.js";
+import { loginController } from "../controllers/index.js";
 
 passport.use(
   new GoogleStrategy(
@@ -15,7 +16,7 @@ passport.use(
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: `${
         MODE === "dev" ? DEV_API : PROD_API
-      }/api/v1/auth/google/callback`,
+      }/api/auth/google/callback`,
     },
     function (accessToken, refreshToken, profile, cb) {
       const {

@@ -8,8 +8,6 @@ const router = express.Router();
 
 router.get("/me", authenticate, userController.me);
 
-router.patch("/changepassword", authenticate, userController.changePassword);
-
 router.patch("/resetpassword", userController.resetPassword);
 
 export default router;

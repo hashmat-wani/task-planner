@@ -5,9 +5,6 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-  },
   type: {
     type: String,
     enum: ["bug", "feature", "story"],
