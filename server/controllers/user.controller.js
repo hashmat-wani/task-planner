@@ -65,4 +65,14 @@ export const userController = {
       return next(err);
     }
   },
+
+  async getAllUsers(req, res, next) {
+    try {
+      const users = await User.find({}, { id: 1, firstName: 1, lastName: 1 });
+
+      res.status(200).json({ success: true, data: users });
+    } catch (err) {
+      return next(err);
+    }
+  },
 };

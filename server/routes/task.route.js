@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use(authenticate);
 
-router.get("/", taskController.getSprintTasks);
+router.get("/:sprintId", taskController.getSprintTasks);
 
 router.post("/", taskController.addTask);
 

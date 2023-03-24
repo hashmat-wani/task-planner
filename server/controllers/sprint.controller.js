@@ -1,11 +1,12 @@
+import Joi from "joi";
 import { Sprint } from "../models/index.js";
+import { createSlug } from "../utils/createSlug.js";
 
 export const sprintController = {
   async getAllSprints(req, res, next) {
     try {
-      // const { _id: userId } = req?.user;
-      // const sprints = await Sprint.find({ user: userId });
-      const sprints = await Sprint.find();
+      const { _id: userId } = req?.user;
+      const sprints = await Sprint.find({ user: userId });
       res.status(200).json({ status: "success", data: sprints });
     } catch (err) {
       next(err);

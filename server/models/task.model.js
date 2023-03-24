@@ -1,17 +1,13 @@
 import mongoose from "mongoose";
 
 const taskSchema = new mongoose.Schema({
-  name: {
+  draft: {
     type: String,
     required: true,
   },
   type: {
     type: String,
     enum: ["bug", "feature", "story"],
-    required: true,
-  },
-  assignee: {
-    type: String,
     required: true,
   },
   status: {
@@ -22,8 +18,9 @@ const taskSchema = new mongoose.Schema({
   sprint: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Sprint",
+    required: true,
   },
-  user: [
+  assignees: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -20,15 +20,17 @@ const sprintsSlice = createSlice({
 export const { setSprints, setStatus } = sprintsSlice.actions;
 export default sprintsSlice.reducer;
 
-export const createSprint =
-  ({ toggleLoading, name }) =>
+export const createUserSprint =
+  ({ toggleLoading, name, handleClose }) =>
   (dispatch) => {
+    console.log(name);
     privateInstance
       .post("/api/sprint", {
         name,
       })
       .then(() => {
-        toast.success("Added successfully!");
+        handleClose();
+        toast.success("Created successfully!");
         dispatch(fetchUserSprints({ toggleLoading }));
       })
       .catch(() => {
@@ -46,7 +48,7 @@ export const fetchUserSprints =
         dispatch(setStatus(STATUS.IDLE));
         dispatch(setSprints(data.data));
         if (setValue) {
-          setValue(data?.data[0].slug);
+          setValue(data?.data[0]._id);
         }
       })
       .catch((err) => {

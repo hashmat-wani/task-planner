@@ -12,15 +12,15 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../../assets/logo.svg";
-import { FlexBox } from "../../components/FlexBox";
-import { shades } from "../../theme";
+import logo from "../assets/logo.svg";
+import { FlexBox } from "./FlexBox";
+import { shades } from "../theme";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import { green } from "@mui/material/colors";
-import { logOut } from "../../state/userSlice";
+import { logOut } from "../state/userSlice";
 import { useContext, useState } from "react";
-import { STATUS } from "../../utils/enums";
-import { loadingContext } from "../../context/LoadingContext";
+import { STATUS } from "../utils/enums";
+import { loadingContext } from "../context/LoadingContext";
 
 const UserAvatar = ({ user, setEmailVerificationAlert }) => {
   return (

@@ -6,14 +6,19 @@ import App from "./App";
 import LoadingContext from "./context/LoadingContext";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { theme } from "./theme";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <LoadingContext>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <BrowserRouter>
-        <App />
+        <LoadingContext>
+          <App />
+        </LoadingContext>
       </BrowserRouter>
-    </LoadingContext>
+    </ThemeProvider>
   </Provider>
 );

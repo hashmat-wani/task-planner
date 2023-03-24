@@ -3,7 +3,10 @@ import { toast } from "react-toastify";
 import { privateInstance } from "../utils/apiInstances";
 import { STATUS } from "../utils/enums";
 
-const initialState = { tasks: [], status: STATUS.IDLE };
+const initialState = {
+  tasks: { todo: [], inProgress: [], done: [] },
+  status: STATUS.IDLE,
+};
 
 const tasksSlice = createSlice({
   name: "tasks",
@@ -20,37 +23,37 @@ const tasksSlice = createSlice({
 export const { setTasks, setStatus } = tasksSlice.actions;
 export default tasksSlice.reducer;
 
-// export const createTask =
-//   ({ toggleLoading, name }) =>
-//   (dispatch) => {
-//     privateInstance
-//       .post("/api/sprint", {
-//         name,
-//       })
-//       .then(() => {
-//         toast.success("Added successfully!");
-//         dispatch(fetchUserSprints({ toggleLoading }));
-//       })
-//       .catch(() => {
-//         toast.error("Something went wrong. Try again..!");
-//       });
-//   };
+export const createTask =
+  ({ payload, handleClose }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    privateInstance
+      .post("/api/task", payload)
+      .then(() => {
+        toast.success("Added successfully!");
+        handleClose();
+        dispatch(fetchSprintTasks({ sprintId: payload.sprint }));
+      })
+      .catch(() => {
+        toast.error("Something went wrong. Try again..!");
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
+  };
 
-// export const fetchSprintTasks =
-//   ({ toggleLoading, sprintId }) =>
-//   (dispatch) => {
-//     toggleLoading();
-//     privateInstance
-//       .get(`/api/task/${sprintId}`)
-//       .then(({ data }) => {
-//         dispatch(setStatus(STATUS.IDLE));
-//         dispatch(setTasks(data.data));
-//       })
-//       .catch((err) => {
-//         dispatch(setStatus(STATUS.ERROR));
-//       })
-//       .finally(toggleLoading);
-//   };
+export const fetchSprintTasks =
+  ({ sprintId }) =>
+  (dispatch) => {
+    privateInstance
+      .get(`/api/task/${sprintId}`)
+      .then(({ data }) => {
+        console.log(data);
+        dispatch(setStatus(STATUS.IDLE));
+        dispatch(setTasks(data.data));
+      })
+      .catch((err) => {
+        dispatch(setStatus(STATUS.ERROR));
+      });
+  };
 
 // export const deleteSprint =
 //   ({ id }) =>

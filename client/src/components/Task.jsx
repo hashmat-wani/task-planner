@@ -1,8 +1,8 @@
 import { Box, styled } from "@mui/material";
 import React from "react";
 
-const Task = () => {
-  return <Card>hey</Card>;
+const Task = ({ task }) => {
+  return <Card>{task.draft}</Card>;
 };
 
 export default Task;

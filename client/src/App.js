@@ -4,9 +4,10 @@ import AppRoutes from "./AppRoutes";
 import EmailVerificationAlert from "./components/EmailVerificationAlert";
 import Loading from "./components/Loading";
 import { loadingContext } from "./context/LoadingContext";
-import Footer from "./scenes/global/Footer";
-import Navbar from "./scenes/global/Navbar";
+import Navbar from "./components/Navbar";
 import { verifyUser } from "./state/userSlice";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [emailVerificationAlert, setEmailVerificationAlert] = useState(false);
@@ -22,10 +23,21 @@ function App() {
     <div className="App">
       <Navbar {...{ setEmailVerificationAlert }} />
       <AppRoutes setEmailVerificationAlert={setEmailVerificationAlert} />
-      <Footer />
       <Loading />
       <EmailVerificationAlert
         {...{ emailVerificationAlert, setEmailVerificationAlert }}
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </div>
   );

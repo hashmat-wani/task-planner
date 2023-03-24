@@ -31,6 +31,7 @@ const corsOptions = {
   methods: "GET,POST,PUT,DELETE,PATCH",
 };
 app.use(cors(corsOptions));
+app.use(express.json({ limit: "50mb" }));
 
 // console.log(await redis.llen("blacklist"));
 

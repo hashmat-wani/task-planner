@@ -6,6 +6,7 @@ import { STATUS } from "../utils/enums";
 
 const initialState = {
   user: null,
+  allUsers: [],
   status: STATUS.IDLE,
 };
 
@@ -17,6 +18,10 @@ const userSlice = createSlice({
       ...state,
       user: { ...state.user, ...action.payload },
     }),
+    setAllUsers: (state, action) => ({
+      ...state,
+      allUsers: action.payload,
+    }),
 
     clearUser: (state, action) => ({ ...state, user: null }),
 
@@ -27,7 +32,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, clearUser, setStatus } = userSlice.actions;
+export const { setUser, clearUser, setAllUsers, setStatus } = userSlice.actions;
 export default userSlice.reducer;
 
 export const register =
@@ -217,4 +222,15 @@ export const sendEmail = (navigate, cb) => (dispatch) => {
       toast.error(message || "Something went wrong.");
     })
     .finally(() => dispatch(setStatus(STATUS.IDLE)));
+};
+
+export const fetchAllUsers = () => (dispatch) => {
+  privateInstance
+    .get("/api/user/all")
+    .then(({ data }) => {
+      dispatch(setAllUsers(data.data));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };

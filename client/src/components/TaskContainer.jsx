@@ -1,13 +1,23 @@
 import { Box, styled, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Task from "./Task";
 import AddIcon from "@mui/icons-material/Add";
 import { FlexBox } from "./FlexBox";
 import { shades } from "../theme";
+import AddTask from "./AddTask";
 
-const TaskContainer = () => {
+const TaskContainer = ({ sprintId, color, title, info, status, tasks }) => {
+  const [openAddTask, setOpenAddTask] = useState(false);
+
   return (
     <Container color={shades.primary[300]}>
+      <AddTask
+        sprintId={sprintId}
+        status={status}
+        open={openAddTask}
+        setOpen={setOpenAddTask}
+      />
+
       <Heading>
         <FlexBox gap="8px">
           <Box
@@ -15,11 +25,11 @@ const TaskContainer = () => {
               height: "15px",
               width: "15px",
               borderRadius: "50%",
-              background: "red",
+              background: color,
             }}
           ></Box>
 
-          <h1>Todo</h1>
+          <h1>{title}</h1>
           <Box
             sx={{
               height: "15px",
@@ -32,19 +42,17 @@ const TaskContainer = () => {
               fontWeight: "bold",
             }}
           >
-            5
+            {tasks.length}
           </Box>
         </FlexBox>
-        <Typography>This item hasn't been started</Typography>
+        <Typography>{info}</Typography>
       </Heading>
       <Tasks>
-        {Array(15)
-          .fill()
-          .map((el) => (
-            <Task />
-          ))}
+        {tasks.map((task) => (
+          <Task task={task} />
+        ))}
       </Tasks>
-      <Bottom>
+      <Bottom onClick={() => setOpenAddTask(true)}>
         <AddIcon /> Add item
       </Bottom>
     </Container>
@@ -74,9 +82,11 @@ const Tasks = styled(Box)({
   rowGap: "10px",
   padding: "10px",
   overflowY: "auto",
+  flex: 1,
 });
 
 const Bottom = styled(FlexBox)({
   padding: "0 10px",
   gap: "6px",
+  cursor: "pointer",
 });
