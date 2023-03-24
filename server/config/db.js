@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
-import { MONGODB_URL } from "../utils/env";
+import { MONGO_URL } from "../utils/env.js";
 
-const connectDB = () => {
+export const connectDB = () => {
   mongoose.set("strictQuery", true);
-  return mongoose.connect(MONGODB_URL);
+  return mongoose.connect(MONGO_URL);
 };
-
-export default connectDB;

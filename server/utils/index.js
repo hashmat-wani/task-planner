@@ -1,1 +1,1 @@
-export { env } from "./env";
+export { createSlug } from "./createSlug.js";
