@@ -24,7 +24,7 @@ import { loadingContext } from "../context/LoadingContext";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { fetchAllUsers } from "../state/userSlice";
-import { createTask } from "../state/tasksSlice";
+import { editTask } from "../state/tasksSlice";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -33,20 +33,15 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide ref={ref} {...props} />;
 });
 
-export default function AddTask({
-  sprintId,
-  status: taskStatus,
-  open,
-  setOpen,
-}) {
+export default function EditTask({ task, open, setOpen }) {
   const dispatch = useDispatch();
 
-  const initialValues = {
-    draft: "",
-    assignees: [],
-    type: "",
-  };
-  const [formData, setFormData] = useState(initialValues);
+  //   const initialValues = {
+  //     draft: "",
+  //     assignees: [],
+  //     type: "",
+  //   };
+  const [formData, setFormData] = useState(task);
 
   const { toggleLoading } = useContext(loadingContext);
 
@@ -55,17 +50,17 @@ export default function AddTask({
 
   const handleClose = () => {
     setOpen(false);
-    setFormData(initialValues);
+    setFormData(task);
   };
 
-  const handleAdd = () => {
+  const handleEdit = () => {
     // sprintId,status
     const assignees = formData.assignees.map((el) => el._id);
     const args = {
-      payload: { ...formData, assignees, status: taskStatus, sprint: sprintId },
+      payload: { ...formData, assignees },
       handleClose,
     };
-    dispatch(createTask(args));
+    dispatch(editTask(args));
   };
 
   const handleChange = (e) => {
@@ -89,7 +84,7 @@ export default function AddTask({
         TransitionComponent={Transition}
         keepMounted
       >
-        <DialogTitle>Add Task</DialogTitle>
+        <DialogTitle>Edit Task</DialogTitle>
         <DialogContent>
           <Box my="15px">
             <TextField
@@ -188,7 +183,7 @@ export default function AddTask({
               }}
             >
               <Button
-                onClick={handleAdd}
+                onClick={handleEdit}
                 sx={{
                   textTransform: "none",
                   height: "100%",
@@ -198,7 +193,7 @@ export default function AddTask({
                 fullWidth
                 variant="contained"
               >
-                Add
+                Update
               </Button>
               {status === STATUS.LOADING && (
                 <CircularProgress

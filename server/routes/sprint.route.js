@@ -10,4 +10,8 @@ router.get("/", sprintController.getAllSprints);
 
 router.post("/", sprintController.addSprint);
 
+router.delete("/:sprintId", sprintController.deleteSprint);
+
+router.patch("/:id", sprintController.editSprint);
+
 export default router;

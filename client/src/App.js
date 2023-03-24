@@ -5,7 +5,7 @@ import EmailVerificationAlert from "./components/EmailVerificationAlert";
 import Loading from "./components/Loading";
 import { loadingContext } from "./context/LoadingContext";
 import Navbar from "./components/Navbar";
-import { verifyUser } from "./state/userSlice";
+import { fetchAllUsers, verifyUser } from "./state/userSlice";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -16,7 +16,7 @@ function App() {
 
   useEffect(() => {
     dispatch(verifyUser({ toggleLoading }));
-    // dispatch(fetchUserSprints());
+    dispatch(fetchAllUsers());
   }, []);
 
   return (

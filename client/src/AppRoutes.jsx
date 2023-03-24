@@ -8,6 +8,7 @@ import ResetPwd from "./scenes/auth/resetPassword/ResetPwd";
 import NewPassword from "./scenes/auth/resetPassword/NewPassword";
 import ResetPwdInstructions from "./scenes/auth/resetPassword/ResetPwdInstructions";
 import { Box } from "@mui/material";
+import PrivateRoute from "./components/PrivateRoute";
 
 const AppRoutes = ({ setEmailVerificationAlert }) => {
   const { user } = useSelector((state) => state.user, shallowEqual);
@@ -16,7 +17,14 @@ const AppRoutes = ({ setEmailVerificationAlert }) => {
   return (
     <Box flex={1}>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
 
         <Route
           path="/signup"

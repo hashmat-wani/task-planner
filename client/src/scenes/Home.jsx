@@ -1,13 +1,133 @@
 import { useContext, useEffect, useState } from "react";
-import { Box, Fab, Tab } from "@mui/material";
+import {
+  Box,
+  Fab,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tab,
+  TextField,
+} from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Sprint from "../components/Sprint";
 import AddIcon from "@mui/icons-material/Add";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { fetchUserSprints } from "../state/sprintsSlice";
+import { deleteSprint, fetchUserSprints } from "../state/sprintsSlice";
 import { loadingContext } from "../context/LoadingContext";
 import CreateSprint from "../components/CreateSprint";
-import AddTask from "../components/AddTask";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { shades } from "../theme";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import { FlexBox } from "../components/FlexBox";
+import EditSprint from "../components/EditSprint";
+
+const Modify = ({ sprintId, dispatch, sprintName }) => {
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const { sprints } = useSelector((state) => state.sprints, shallowEqual);
+  const { toggleLoading } = useContext(loadingContext);
+  const [open, setOpen] = useState(false);
+
+  const handleOpenUserMenu = (event) => {
+    event.stopPropagation();
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = (event) => {
+    event.stopPropagation();
+    setAnchorElUser(null);
+  };
+
+  const handleDlt = (e) => {
+    e.stopPropagation();
+    handleCloseUserMenu(e);
+    dispatch(deleteSprint({ sprintId, toggleLoading }));
+  };
+  const handleEdit = (e) => {
+    e.stopPropagation();
+    handleCloseUserMenu(e);
+    setOpen(true);
+  };
+  return (
+    <Box>
+      <EditSprint {...{ open, setOpen, sprintName, id: sprintId }} />
+      <IconButton onClick={handleOpenUserMenu}>
+        <MoreVertIcon />
+      </IconButton>
+      <Menu
+        sx={{
+          "& ul": {
+            padding: 0,
+          },
+          "> div": {
+            borderRadius: "10px",
+          },
+        }}
+        disableScrollLock={true}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&:before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+      >
+        <MenuItem
+          sx={{
+            borderBottom: `1px solid ${shades.secondary[300]}`,
+          }}
+          onClick={handleEdit}
+        >
+          <FlexBox gap="5px">
+            <ModeEditIcon />
+            Edit
+          </FlexBox>
+        </MenuItem>
+
+        {sprints.length > 1 && (
+          <MenuItem onClick={handleDlt}>
+            <FlexBox gap="5px" color="#d32f2f">
+              <DeleteOutlineIcon />
+              Delete
+            </FlexBox>
+          </MenuItem>
+        )}
+      </Menu>
+    </Box>
+  );
+};
 
 export default function Home() {
   const [value, setValue] = useState(null);
@@ -20,7 +140,6 @@ export default function Home() {
   const { sprints } = useSelector((state) => state.sprints, shallowEqual);
 
   const handleChange = (event, newValue) => {
-    console.log(newValue);
     setValue(newValue);
   };
 
@@ -47,7 +166,19 @@ export default function Home() {
               scrollButtons="auto"
             >
               {sprints.map((el, idx) => (
-                <Tab key={idx} label={el.name} value={el._id} />
+                <Tab
+                  icon={
+                    <Modify
+                      sprintId={el._id}
+                      sprintName={el?.name}
+                      dispatch={dispatch}
+                    />
+                  }
+                  iconPosition="end"
+                  key={idx}
+                  label={el.name}
+                  value={el._id}
+                />
               ))}
             </TabList>
           </Box>

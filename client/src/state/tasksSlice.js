@@ -55,17 +55,33 @@ export const fetchSprintTasks =
       });
   };
 
-// export const deleteSprint =
-//   ({ id }) =>
-//   (dispatch) => {
-//     privateInstance
-//       .delete(`/api/v1/pins/${id}`)
-//       .then(() => {
-//         toast.success("Deleted successfully");
-//         dispatch(fetchPins());
-//       })
-//       .catch((err) => {
-//         const message = err?.response?.data?.message;
-//         toast.error(message || "Something went wrong.");
-//       });
-//   };
+export const editTask =
+  ({ payload, handleClose }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    privateInstance
+      .patch(`/api/task/${payload._id}`, payload)
+      .then(() => {
+        toast.success("Edited successfully!");
+        handleClose();
+        dispatch(fetchSprintTasks({ sprintId: payload.sprint }));
+      })
+      .catch(() => {
+        toast.error("Something went wrong. Try again..!");
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
+  };
+export const deleteTask =
+  ({ task }) =>
+  (dispatch) => {
+    privateInstance
+      .delete(`/api/task/${task?._id}`)
+      .then(() => {
+        toast.success("Deleted successfully");
+        dispatch(fetchSprintTasks({ sprintId: task?.sprint }));
+      })
+      .catch((err) => {
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
+      });
+  };

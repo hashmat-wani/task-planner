@@ -252,40 +252,38 @@ function Navbar({ setEmailVerificationAlert }) {
             }}
             onClick={handleCloseUserMenu}
           >
-            <Link to="/account">
-              <FlexBox justifyContent="space-between" gap="35px">
-                <Box>
-                  <Typography fontWeight="bold" fontSize="13px">
-                    {user?.firstName} {user?.lastName}
-                  </Typography>
-                  <Typography color={shades.primary[300]} variant="small">
-                    {user?.email}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Button
-                    sx={{
-                      fontSize: "10px",
-                      padding: 0,
-                      color: "#fff",
-                      borderRadius: "50px",
-                      pt: "1px",
-                      bgcolor: user?.verified ? "#40a0ed" : "#ff7300",
-                      ":hover": {
-                        bgcolor: user?.verified ? "#008cff" : "#ff5e00",
-                      },
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      if (!user?.verified) setEmailVerificationAlert(true);
-                    }}
-                  >
-                    {user?.verified ? "Verified" : "Verify"}
-                  </Button>
-                </Box>
-              </FlexBox>
-            </Link>
+            <FlexBox justifyContent="space-between" gap="35px">
+              <Box>
+                <Typography fontWeight="bold" fontSize="13px">
+                  {user?.firstName} {user?.lastName}
+                </Typography>
+                <Typography color={shades.primary[300]} variant="small">
+                  {user?.email}
+                </Typography>
+              </Box>
+              <Box>
+                <Button
+                  sx={{
+                    fontSize: "10px",
+                    padding: 0,
+                    color: "#fff",
+                    borderRadius: "50px",
+                    pt: "1px",
+                    bgcolor: user?.verified ? "#40a0ed" : "#ff7300",
+                    ":hover": {
+                      bgcolor: user?.verified ? "#008cff" : "#ff5e00",
+                    },
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (!user?.verified) setEmailVerificationAlert(true);
+                  }}
+                >
+                  {user?.verified ? "Verified" : "Verify"}
+                </Button>
+              </Box>
+            </FlexBox>
           </MenuItem>
 
           {/* links */}

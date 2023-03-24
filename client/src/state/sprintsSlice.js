@@ -23,7 +23,6 @@ export default sprintsSlice.reducer;
 export const createUserSprint =
   ({ toggleLoading, name, handleClose }) =>
   (dispatch) => {
-    console.log(name);
     privateInstance
       .post("/api/sprint", {
         name,
@@ -57,17 +56,35 @@ export const fetchUserSprints =
       .finally(toggleLoading);
   };
 
-// export const deleteSprint =
-//   ({ id }) =>
-//   (dispatch) => {
-//     privateInstance
-//       .delete(`/api/v1/pins/${id}`)
-//       .then(() => {
-//         toast.success("Deleted successfully");
-//         dispatch(fetchPins());
-//       })
-//       .catch((err) => {
-//         const message = err?.response?.data?.message;
-//         toast.error(message || "Something went wrong.");
-//       });
-//   };
+export const deleteSprint =
+  ({ sprintId, toggleLoading }) =>
+  (dispatch) => {
+    privateInstance
+      .delete(`/api/sprint/${sprintId}`)
+      .then(() => {
+        toast.success("Deleted successfully");
+        dispatch(fetchUserSprints({ toggleLoading }));
+      })
+      .catch((err) => {
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
+      });
+  };
+
+export const editSprint =
+  ({ name, id, handleClose, toggleLoading }) =>
+  (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
+    privateInstance
+      .patch(`/api/sprint/${id}`, { name })
+      .then(() => {
+        toast.success("Edited successfully");
+        dispatch(fetchUserSprints({ toggleLoading }));
+        handleClose();
+      })
+      .catch((err) => {
+        const message = err?.response?.data?.message;
+        toast.error(message || "Something went wrong.");
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
+  };
