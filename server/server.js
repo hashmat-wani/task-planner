@@ -13,6 +13,7 @@ import {
   taskRoute,
   authRoute,
   userRoute,
+  mailRoute,
 } from "./routes/index.js";
 import { connectDB, redis } from "./config/index.js";
 import { errorHandler } from "./middlewares/index.js";
@@ -44,6 +45,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/user", userRoute);
 app.use("/api/sprint", sprintRoute);
 app.use("/api/task", taskRoute);
+app.use("/api/mail", mailRoute);
 
 // --------Error handler-------
 app.use(errorHandler);

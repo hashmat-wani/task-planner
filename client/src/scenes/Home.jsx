@@ -22,7 +22,7 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { FlexBox } from "../components/FlexBox";
 import EditSprint from "../components/EditSprint";
 
-const Modify = ({ sprintId, dispatch, sprintName }) => {
+const Modify = ({ sprintId, dispatch, sprintName, setValue }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { sprints } = useSelector((state) => state.sprints, shallowEqual);
   const { toggleLoading } = useContext(loadingContext);
@@ -41,7 +41,7 @@ const Modify = ({ sprintId, dispatch, sprintName }) => {
   const handleDlt = (e) => {
     e.stopPropagation();
     handleCloseUserMenu(e);
-    dispatch(deleteSprint({ sprintId, toggleLoading }));
+    dispatch(deleteSprint({ sprintId, toggleLoading, setValue }));
   };
   const handleEdit = (e) => {
     e.stopPropagation();
@@ -49,7 +49,7 @@ const Modify = ({ sprintId, dispatch, sprintName }) => {
     setOpen(true);
   };
   return (
-    <Box>
+    <Box ml="15px">
       <EditSprint {...{ open, setOpen, sprintName, id: sprintId }} />
       <IconButton onClick={handleOpenUserMenu}>
         <MoreVertIcon />
@@ -150,7 +150,6 @@ export default function Home() {
   return (
     <Box
       sx={{
-        // border: "1px solid red",
         height: "calc(100vh - 140px)",
         m: "30px auto",
         maxWidth: "1300px",
@@ -167,11 +166,18 @@ export default function Home() {
             >
               {sprints.map((el, idx) => (
                 <Tab
+                  sx={{
+                    minHeight: 0,
+                    lineHeight: 1,
+                    p: "5px 15px",
+                    textTransform: "none",
+                  }}
                   icon={
                     <Modify
                       sprintId={el._id}
                       sprintName={el?.name}
                       dispatch={dispatch}
+                      setValue={setValue}
                     />
                   }
                   iconPosition="end"
@@ -196,7 +202,7 @@ export default function Home() {
         </TabContext>
       )}
       <Fab
-        sx={{ position: "absolute", bottom: 70, right: 20 }}
+        sx={{ position: "absolute", bottom: 35, right: 35 }}
         color="primary"
         aria-label="add"
         onClick={() => setOpenCreateSprint(true)}

@@ -29,7 +29,7 @@ export default function EditSprint({ open, setOpen, sprintName, id }) {
 
   const handleClose = () => {
     setOpen(false);
-    setInput("");
+    setInput(sprintName);
   };
 
   const handleEdit = () => {

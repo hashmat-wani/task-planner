@@ -16,12 +16,13 @@ const Task = ({ task }) => {
       <Bar mb="15px">
         <Chip label={task.type}>{task.type}</Chip>
         <AvatarGroup max={3}>
-          {task.assignees.map((el) => (
+          {task.assignees.map((el, idx) => (
             <Avatar
+              key={idx}
               sx={{ width: 20, height: 20 }}
               alt="assignee logo"
               src={el?.avatar}
-              title={`${el?.firstName} ${el?.lastName}`}
+              title={`${el?.firstName} ${el?.lastName ? el.lastName : ""}`}
             />
           ))}
         </AvatarGroup>

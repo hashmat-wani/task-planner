@@ -43,10 +43,10 @@ export const createTask =
 export const fetchSprintTasks =
   ({ sprintId }) =>
   (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
     privateInstance
       .get(`/api/task/${sprintId}`)
       .then(({ data }) => {
-        console.log(data);
         dispatch(setStatus(STATUS.IDLE));
         dispatch(setTasks(data.data));
       })
@@ -74,6 +74,7 @@ export const editTask =
 export const deleteTask =
   ({ task }) =>
   (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
     privateInstance
       .delete(`/api/task/${task?._id}`)
       .then(() => {
@@ -83,5 +84,6 @@ export const deleteTask =
       .catch((err) => {
         const message = err?.response?.data?.message;
         toast.error(message || "Something went wrong.");
-      });
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
   };

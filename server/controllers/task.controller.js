@@ -8,17 +8,17 @@ export const taskController = {
       const todo = await Task.find({
         sprint: sprintId,
         status: "to-do",
-      }).populate("assignees");
+      }).populate("assignees", ["firstName", "lastName", "avatar", "_id"]);
 
       const inProgress = await Task.find({
         sprint: sprintId,
         status: "in-progress",
-      }).populate("assignees");
+      }).populate("assignees", ["firstName", "lastName", "avatar", "_id"]);
 
       const done = await Task.find({
         sprint: sprintId,
         status: "done",
-      }).populate("assignees");
+      }).populate("assignees", ["firstName", "lastName", "avatar", "_id"]);
 
       res.status(200).json({
         status: "success",
@@ -31,7 +31,6 @@ export const taskController = {
 
   async addTask(req, res, next) {
     try {
-      console.log(req.body);
       await Task.create(req.body);
       return res.status(201).json({
         success: true,

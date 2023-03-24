@@ -68,6 +68,9 @@ export default function EditTask({ task, open, setOpen }) {
     setFormData({ ...formData, [name]: value });
   };
 
+  const missingField = () =>
+    formData.draft.trim() === "" || formData.type === "";
+
   return (
     <div>
       <Dialog
@@ -189,7 +192,7 @@ export default function EditTask({ task, open, setOpen }) {
                   height: "100%",
                   borderRadius: "7px",
                 }}
-                disabled={status === STATUS.LOADING}
+                disabled={status === STATUS.LOADING || missingField()}
                 fullWidth
                 variant="contained"
               >

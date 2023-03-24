@@ -5,15 +5,26 @@ import AddIcon from "@mui/icons-material/Add";
 import { FlexBox } from "./FlexBox";
 import { shades } from "../theme";
 import AddTask from "./AddTask";
+import { STATUS } from "../utils/enums";
+import { shallowEqual, useSelector } from "react-redux";
 
-const TaskContainer = ({ sprintId, color, title, info, status, tasks }) => {
+const TaskContainer = ({
+  sprintId,
+  color,
+  title,
+  info,
+  status: taskStatus,
+  tasks,
+}) => {
   const [openAddTask, setOpenAddTask] = useState(false);
+
+  const { status } = useSelector((state) => state.tasks, shallowEqual);
 
   return (
     <Container color={shades.primary[300]}>
       <AddTask
         sprintId={sprintId}
-        status={status}
+        status={taskStatus}
         open={openAddTask}
         setOpen={setOpenAddTask}
       />
@@ -47,10 +58,22 @@ const TaskContainer = ({ sprintId, color, title, info, status, tasks }) => {
         </FlexBox>
         <Typography>{info}</Typography>
       </Heading>
+
       <Tasks>
-        {tasks.map((task) => (
-          <Task task={task} />
-        ))}
+        {status === STATUS.ERROR ? (
+          "ERROR"
+        ) : status === STATUS.LOADING ? (
+          <progress
+            style={{ width: "90%", margin: "10px auto" }}
+            value={null}
+          />
+        ) : (
+          <>
+            {tasks.map((task, idx) => (
+              <Task key={idx} task={task} />
+            ))}
+          </>
+        )}
       </Tasks>
       <Bottom onClick={() => setOpenAddTask(true)}>
         <AddIcon /> Add item

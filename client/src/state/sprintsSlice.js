@@ -23,6 +23,7 @@ export default sprintsSlice.reducer;
 export const createUserSprint =
   ({ toggleLoading, name, handleClose }) =>
   (dispatch) => {
+    dispatch(setStatus(STATUS.LOADING));
     privateInstance
       .post("/api/sprint", {
         name,
@@ -34,7 +35,8 @@ export const createUserSprint =
       })
       .catch(() => {
         toast.error("Something went wrong. Try again..!");
-      });
+      })
+      .finally(() => dispatch(setStatus(STATUS.IDLE)));
   };
 
 export const fetchUserSprints =
@@ -57,13 +59,13 @@ export const fetchUserSprints =
   };
 
 export const deleteSprint =
-  ({ sprintId, toggleLoading }) =>
+  ({ sprintId, toggleLoading, setValue }) =>
   (dispatch) => {
     privateInstance
       .delete(`/api/sprint/${sprintId}`)
       .then(() => {
         toast.success("Deleted successfully");
-        dispatch(fetchUserSprints({ toggleLoading }));
+        dispatch(fetchUserSprints({ toggleLoading, setValue }));
       })
       .catch((err) => {
         const message = err?.response?.data?.message;

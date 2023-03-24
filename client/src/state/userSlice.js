@@ -225,12 +225,14 @@ export const sendEmail = (navigate, cb) => (dispatch) => {
 };
 
 export const fetchAllUsers = () => (dispatch) => {
+  dispatch(setStatus(STATUS.LOADING));
   privateInstance
     .get("/api/user/all")
     .then(({ data }) => {
+      dispatch(setStatus(STATUS.IDLE));
       dispatch(setAllUsers(data.data));
     })
     .catch((err) => {
-      console.log(err);
+      dispatch(setStatus(STATUS.ERROR));
     });
 };

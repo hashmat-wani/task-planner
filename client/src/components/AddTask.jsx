@@ -16,14 +16,11 @@ import {
 } from "@mui/material";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { STATUS } from "../utils/enums";
-import { forwardRef, useContext, useEffect, useState } from "react";
+import { forwardRef, useState } from "react";
 import { FlexBox } from "./FlexBox";
 import { shades } from "../theme";
-import { createUserSprint } from "../state/sprintsSlice";
-import { loadingContext } from "../context/LoadingContext";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { fetchAllUsers } from "../state/userSlice";
 import { createTask } from "../state/tasksSlice";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -48,8 +45,6 @@ export default function AddTask({
   };
   const [formData, setFormData] = useState(initialValues);
 
-  const { toggleLoading } = useContext(loadingContext);
-
   const { status } = useSelector((state) => state.tasks, shallowEqual);
   const { allUsers } = useSelector((state) => state.user, shallowEqual);
 
@@ -72,6 +67,9 @@ export default function AddTask({
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const missingField = () =>
+    formData.draft.trim() === "" || formData.type === "";
 
   return (
     <div>
@@ -194,7 +192,7 @@ export default function AddTask({
                   height: "100%",
                   borderRadius: "7px",
                 }}
-                disabled={status === STATUS.LOADING}
+                disabled={status === STATUS.LOADING || missingField()}
                 fullWidth
                 variant="contained"
               >

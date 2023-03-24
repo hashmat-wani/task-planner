@@ -46,7 +46,6 @@ export const sprintController = {
     try {
       const { sprintId } = req?.params;
       const { _id: userId } = req.user;
-      console.log(sprintId, userId);
 
       const sprints = await Sprint.find({ user: userId });
       if (sprints.length === 1) {
