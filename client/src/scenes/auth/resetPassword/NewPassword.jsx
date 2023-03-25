@@ -13,7 +13,7 @@ export default function NewPassword() {
 
   useEffect(() => {
     privateInstance
-      .get(`/api/v1/mail/verifyticket/${ticket}`)
+      .get(`/api/mail/verifyticket/${ticket}`)
       .then(() => setExpired(false))
       .catch(() => setExpired(true))
       .finally(() => setRender(true));
