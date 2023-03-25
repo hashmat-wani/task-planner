@@ -87,7 +87,7 @@ export default TaskContainer;
 const Container = styled(Box)({
   background: "#f6f8fa",
   padding: "10px",
-  minWidth: "400px",
+  minWidth: "330px",
   display: "flex",
   flexDirection: "column",
   rowGap: "15px",

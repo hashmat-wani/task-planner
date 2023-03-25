@@ -1,17 +1,20 @@
 import { Box } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { fetchSprintTasks } from "../state/tasksSlice";
 import TaskContainer from "./TaskContainer";
+import InfoContainer from "./InfoContainer";
 
 const Sprint = ({ sprintId }) => {
   const dispatch = useDispatch();
   const { tasks } = useSelector((state) => state.tasks, shallowEqual);
+  const [userId, setUserId] = useState(null);
   useEffect(() => {
-    dispatch(fetchSprintTasks({ sprintId }));
-  }, [sprintId]);
+    dispatch(fetchSprintTasks({ sprintId, userId }));
+  }, [sprintId, userId]);
   return (
     <Box sx={{ overflowX: "auto" }} display="flex" gap={2} height="100%">
+      <InfoContainer {...{ sprintId, setUserId }} />
       <TaskContainer
         title="Todo"
         color="#2da44e"

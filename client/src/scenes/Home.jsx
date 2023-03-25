@@ -150,8 +150,8 @@ export default function Home() {
   return (
     <Box
       sx={{
-        height: "calc(100vh - 140px)",
-        m: "30px auto",
+        height: "calc(100vh - 120px)",
+        m: "10px auto",
         maxWidth: "1300px",
       }}
     >

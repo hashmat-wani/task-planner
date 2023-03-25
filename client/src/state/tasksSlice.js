@@ -5,6 +5,7 @@ import { STATUS } from "../utils/enums";
 
 const initialState = {
   tasks: { todo: [], inProgress: [], done: [] },
+  singleUserTasks: { todo: [], inProgress: [], done: [] },
   status: STATUS.IDLE,
 };
 
@@ -13,6 +14,10 @@ const tasksSlice = createSlice({
   initialState,
   reducers: {
     setTasks: (state, action) => ({ ...state, tasks: action.payload }),
+    // setSingleUserTasks: (state, action) => ({
+    //   ...state,
+    //   singleUserTasks: action.payload,
+    // }),
     setStatus: (state, action) => ({
       ...state,
       status: action.payload,
@@ -41,11 +46,11 @@ export const createTask =
   };
 
 export const fetchSprintTasks =
-  ({ sprintId }) =>
+  ({ sprintId, userId }) =>
   (dispatch) => {
     dispatch(setStatus(STATUS.LOADING));
     privateInstance
-      .get(`/api/task/${sprintId}`)
+      .get(`/api/task/${sprintId}`, { params: { userId } })
       .then(({ data }) => {
         dispatch(setStatus(STATUS.IDLE));
         dispatch(setTasks(data.data));

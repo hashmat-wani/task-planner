@@ -7,7 +7,12 @@ export const sprintController = {
   async getAllSprints(req, res, next) {
     try {
       const { _id: userId } = req?.user;
-      const sprints = await Sprint.find({ user: userId });
+      const sprints = await Sprint.find({ user: userId }).populate("user", [
+        "firstName",
+        "lastName",
+        "_id",
+      ]);
+
       res.status(200).json({ status: "success", data: sprints });
     } catch (err) {
       next(err);

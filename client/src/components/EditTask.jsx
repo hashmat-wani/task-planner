@@ -19,11 +19,9 @@ import { STATUS } from "../utils/enums";
 import { forwardRef, useContext, useEffect, useState } from "react";
 import { FlexBox } from "./FlexBox";
 import { shades } from "../theme";
-import { createUserSprint } from "../state/sprintsSlice";
 import { loadingContext } from "../context/LoadingContext";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { fetchAllUsers } from "../state/userSlice";
 import { editTask } from "../state/tasksSlice";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -36,14 +34,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 export default function EditTask({ task, open, setOpen }) {
   const dispatch = useDispatch();
 
-  //   const initialValues = {
-  //     draft: "",
-  //     assignees: [],
-  //     type: "",
-  //   };
   const [formData, setFormData] = useState(task);
-
-  const { toggleLoading } = useContext(loadingContext);
 
   const { status } = useSelector((state) => state.tasks, shallowEqual);
   const { allUsers } = useSelector((state) => state.user, shallowEqual);
@@ -109,13 +100,16 @@ export default function EditTask({ task, open, setOpen }) {
               sx={{ my: 2 }}
               size="small"
               onChange={(event, newValue) => {
+                console.log(newValue);
                 setFormData({ ...formData, assignees: newValue });
               }}
               value={formData.assignees}
               options={allUsers}
               disableCloseOnSelect
               getOptionLabel={(option) =>
-                `${option.firstName} ${option?.lastName}`
+                `${option.firstName} ${
+                  option?.lastName ? option?.lastName : ""
+                }`
               }
               renderOption={(props, option, { selected }) => (
                 <li {...props}>
@@ -153,6 +147,24 @@ export default function EditTask({ task, open, setOpen }) {
                 <MenuItem value="bug">Bug</MenuItem>
                 <MenuItem value="feature">Feature</MenuItem>
                 <MenuItem value="story">Story</MenuItem>
+              </Select>
+            </FormControl>
+
+            {/* ------Status--------- */}
+
+            <FormControl sx={{ mt: 2 }} required size="small" fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select
+                size="small"
+                value={formData.status}
+                label="Status"
+                onChange={handleChange}
+                name="status"
+                required
+              >
+                <MenuItem value="to-do">Todo</MenuItem>
+                <MenuItem value="in-progress">In Progress</MenuItem>
+                <MenuItem value="done">Done</MenuItem>
               </Select>
             </FormControl>
           </Box>

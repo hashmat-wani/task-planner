@@ -3,20 +3,23 @@ import { Task } from "../models/index.js";
 export const taskController = {
   async getSprintTasks(req, res, next) {
     const { sprintId } = req?.params;
+    const { userId } = req?.query;
     try {
-      // const { _id: userId } = req?.user;
       const todo = await Task.find({
         sprint: sprintId,
+        ...(userId && { assignees: userId }),
         status: "to-do",
       }).populate("assignees", ["firstName", "lastName", "avatar", "_id"]);
 
       const inProgress = await Task.find({
         sprint: sprintId,
+        ...(userId && { assignees: userId }),
         status: "in-progress",
       }).populate("assignees", ["firstName", "lastName", "avatar", "_id"]);
 
       const done = await Task.find({
         sprint: sprintId,
+        ...(userId && { assignees: userId }),
         status: "done",
       }).populate("assignees", ["firstName", "lastName", "avatar", "_id"]);
 
