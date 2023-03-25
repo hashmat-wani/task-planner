@@ -59,11 +59,12 @@ export const fetchUserSprints =
   };
 
 export const deleteSprint =
-  ({ sprintId, toggleLoading, setValue }) =>
+  ({ sprintId, toggleLoading, setValue, handleClose }) =>
   (dispatch) => {
     privateInstance
       .delete(`/api/sprint/${sprintId}`)
       .then(() => {
+        handleClose();
         toast.success("Deleted successfully");
         dispatch(fetchUserSprints({ toggleLoading, setValue }));
       })

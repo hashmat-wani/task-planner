@@ -1,18 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  Box,
-  Fab,
-  IconButton,
-  Menu,
-  MenuItem,
-  Tab,
-  TextField,
-} from "@mui/material";
+import { Box, Fab, IconButton, Menu, MenuItem, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Sprint from "../components/Sprint";
 import AddIcon from "@mui/icons-material/Add";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { deleteSprint, fetchUserSprints } from "../state/sprintsSlice";
+import { fetchUserSprints } from "../state/sprintsSlice";
 import { loadingContext } from "../context/LoadingContext";
 import CreateSprint from "../components/CreateSprint";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -21,12 +13,13 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { FlexBox } from "../components/FlexBox";
 import EditSprint from "../components/EditSprint";
+import DeleteSprint from "../components/DeleteSprint";
 
-const Modify = ({ sprintId, dispatch, sprintName, setValue }) => {
+const Modify = ({ sprintId, sprintName, setValue }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { sprints } = useSelector((state) => state.sprints, shallowEqual);
-  const { toggleLoading } = useContext(loadingContext);
   const [open, setOpen] = useState(false);
+  const [openDlt, setOpenDlt] = useState(false);
 
   const handleOpenUserMenu = (event) => {
     event.stopPropagation();
@@ -41,7 +34,7 @@ const Modify = ({ sprintId, dispatch, sprintName, setValue }) => {
   const handleDlt = (e) => {
     e.stopPropagation();
     handleCloseUserMenu(e);
-    dispatch(deleteSprint({ sprintId, toggleLoading, setValue }));
+    setOpenDlt(true);
   };
   const handleEdit = (e) => {
     e.stopPropagation();
@@ -51,6 +44,9 @@ const Modify = ({ sprintId, dispatch, sprintName, setValue }) => {
   return (
     <Box ml="15px">
       <EditSprint {...{ open, setOpen, sprintName, id: sprintId }} />
+      <DeleteSprint
+        {...{ open: openDlt, setOpen: setOpenDlt, id: sprintId, setValue }}
+      />
       <IconButton onClick={handleOpenUserMenu}>
         <MoreVertIcon />
       </IconButton>
@@ -176,7 +172,6 @@ export default function Home() {
                     <Modify
                       sprintId={el._id}
                       sprintName={el?.name}
-                      dispatch={dispatch}
                       setValue={setValue}
                     />
                   }

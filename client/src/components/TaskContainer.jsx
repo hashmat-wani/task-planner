@@ -76,7 +76,7 @@ const TaskContainer = ({
         )}
       </Tasks>
       <Bottom onClick={() => setOpenAddTask(true)}>
-        <AddIcon /> Add item
+        <AddIcon /> Add task
       </Bottom>
     </Container>
   );

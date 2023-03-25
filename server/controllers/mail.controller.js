@@ -134,8 +134,8 @@ export const mailController = {
       await transporter.sendMail({
         from: '"hashtech #️⃣" <hashmatw555@gmail.com>', // sender address
         to: email, // list of receivers
-        subject: "Change password for OpenAI",
-        html: resetPasswordTemplate(email, user.firstName, token),
+        subject: "Change password for Task Planner",
+        html: resetPasswordTemplate(user.firstName, token),
       });
 
       await User.findByIdAndUpdate(user?._id, { resetToken }, { new: true });
