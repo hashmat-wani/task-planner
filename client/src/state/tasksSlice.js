@@ -14,10 +14,6 @@ const tasksSlice = createSlice({
   initialState,
   reducers: {
     setTasks: (state, action) => ({ ...state, tasks: action.payload }),
-    // setSingleUserTasks: (state, action) => ({
-    //   ...state,
-    //   singleUserTasks: action.payload,
-    // }),
     setStatus: (state, action) => ({
       ...state,
       status: action.payload,
@@ -67,8 +63,8 @@ export const editTask =
     privateInstance
       .patch(`/api/task/${payload._id}`, payload)
       .then(() => {
-        toast.success("Edited successfully!");
-        handleClose();
+        // toast.success("Edited successfully!");
+        if (handleClose) handleClose();
         dispatch(fetchSprintTasks({ sprintId: payload.sprint }));
       })
       .catch(() => {

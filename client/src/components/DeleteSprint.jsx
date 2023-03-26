@@ -20,7 +20,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide ref={ref} {...props} />;
 });
 
-export default function DeleteSprint({ open, setOpen, id, setValue }) {
+export default function DeleteSprint({ open, setOpen, id }) {
   const dispatch = useDispatch();
 
   const { status } = useSelector((state) => state.sprints, shallowEqual);
@@ -34,7 +34,6 @@ export default function DeleteSprint({ open, setOpen, id, setValue }) {
     const args = {
       sprintId: id,
       toggleLoading,
-      setValue,
       handleClose,
     };
     dispatch(deleteSprint(args));

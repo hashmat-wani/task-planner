@@ -16,10 +16,9 @@ import {
 } from "@mui/material";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { STATUS } from "../utils/enums";
-import { forwardRef, useContext, useEffect, useState } from "react";
+import { forwardRef, useState } from "react";
 import { FlexBox } from "./FlexBox";
 import { shades } from "../theme";
-import { loadingContext } from "../context/LoadingContext";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import { editTask } from "../state/tasksSlice";
@@ -45,7 +44,6 @@ export default function EditTask({ task, open, setOpen }) {
   };
 
   const handleEdit = () => {
-    // sprintId,status
     const assignees = formData.assignees.map((el) => el._id);
     const args = {
       payload: { ...formData, assignees },
@@ -100,7 +98,6 @@ export default function EditTask({ task, open, setOpen }) {
               sx={{ my: 2 }}
               size="small"
               onChange={(event, newValue) => {
-                console.log(newValue);
                 setFormData({ ...formData, assignees: newValue });
               }}
               value={formData.assignees}
@@ -114,12 +111,13 @@ export default function EditTask({ task, open, setOpen }) {
               renderOption={(props, option, { selected }) => (
                 <li {...props}>
                   <Checkbox
+                    value={formData.assignees}
                     icon={icon}
                     checkedIcon={checkedIcon}
                     style={{ marginRight: 8 }}
                     checked={selected}
                   />
-                  {option.firstName} {option?.lastName}
+                  {option.firstName} {option?.lastName ? option?.lastName : ""}
                 </li>
               )}
               renderInput={(params) => (

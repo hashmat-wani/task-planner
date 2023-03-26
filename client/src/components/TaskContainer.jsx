@@ -1,5 +1,5 @@
 import { Box, styled, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import Task from "./Task";
 import AddIcon from "@mui/icons-material/Add";
 import { FlexBox } from "./FlexBox";
@@ -7,6 +7,7 @@ import { shades } from "../theme";
 import AddTask from "./AddTask";
 import { STATUS } from "../utils/enums";
 import { shallowEqual, useSelector } from "react-redux";
+import { Droppable } from "react-beautiful-dnd";
 
 const TaskContainer = ({
   sprintId,
@@ -58,23 +59,28 @@ const TaskContainer = ({
         </FlexBox>
         <Typography>{info}</Typography>
       </Heading>
-
-      <Tasks>
-        {status === STATUS.ERROR ? (
-          "ERROR"
-        ) : status === STATUS.LOADING ? (
-          <progress
-            style={{ width: "90%", margin: "10px auto" }}
-            value={null}
-          />
-        ) : (
-          <>
-            {tasks.map((task, idx) => (
-              <Task key={idx} task={task} />
-            ))}
-          </>
+      <Droppable droppableId={taskStatus}>
+        {(provided) => (
+          <TasksWrapper ref={provided.innerRef} {...provided.droppableProps}>
+            {status === STATUS.ERROR ? (
+              "ERROR"
+            ) : status === STATUS.LOADING ? (
+              <progress
+                style={{ width: "90%", margin: "10px auto" }}
+                value={null}
+              />
+            ) : (
+              <>
+                {tasks.map((task, idx) => (
+                  <Task key={idx} task={task} index={idx} />
+                ))}
+              </>
+            )}
+            {/* {provided.placeholder} */}
+          </TasksWrapper>
         )}
-      </Tasks>
+      </Droppable>
+
       <Bottom onClick={() => setOpenAddTask(true)}>
         <AddIcon /> Add task
       </Bottom>
@@ -99,7 +105,7 @@ const Heading = styled(Box)({
   padding: "0 10px",
 });
 
-const Tasks = styled(Box)({
+const TasksWrapper = styled(Box)({
   display: "flex",
   flexDirection: "column",
   rowGap: "10px",

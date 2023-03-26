@@ -1,6 +1,6 @@
 # Task Planner
 
-Task Manager is a simple application for managing tasks and sprints. It allows you to create sprints, add tasks to them, and assign those tasks to specific users. You can also change the status of tasks as they progress through the sprint. It uses various technologies such as **_React, Redux, Formik, Yup, MUI, Node.js, Express.js, MongoDB, mongoose, Joi, Oauth, Nodemailer, JWT, Redis, multer,_** _and_ **_Bcrypt_** for implementation.
+Task Manager is a simple application for managing tasks and sprints. It allows you to create sprints, add tasks to them, and assign those tasks to specific users. You can also change the status of tasks as they progress through the sprint using Drag and Drop. It uses various technologies such as **_React, Redux, Formik, Yup, MUI, Node.js, Express.js, MongoDB, mongoose, Joi, Oauth, Nodemailer, JWT, Redis, multer,_** _and_ **_Bcrypt_** for implementation.
 
 ## Features
 

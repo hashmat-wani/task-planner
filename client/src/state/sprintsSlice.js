@@ -3,13 +3,17 @@ import { toast } from "react-toastify";
 import { privateInstance } from "../utils/apiInstances";
 import { STATUS } from "../utils/enums";
 
-const initialState = { sprints: [], status: STATUS.IDLE };
+const initialState = { activeSprint: null, sprints: [], status: STATUS.IDLE };
 
 const sprintsSlice = createSlice({
   name: "sprints",
   initialState,
   reducers: {
     setSprints: (state, action) => ({ ...state, sprints: action.payload }),
+    setActiveSprint: (state, action) => ({
+      ...state,
+      activeSprint: action.payload,
+    }),
     setStatus: (state, action) => ({
       ...state,
       status: action.payload,
@@ -17,7 +21,7 @@ const sprintsSlice = createSlice({
   },
 });
 
-export const { setSprints, setStatus } = sprintsSlice.actions;
+export const { setSprints, setActiveSprint, setStatus } = sprintsSlice.actions;
 export default sprintsSlice.reducer;
 
 export const createUserSprint =
@@ -40,7 +44,7 @@ export const createUserSprint =
   };
 
 export const fetchUserSprints =
-  ({ toggleLoading, setValue }) =>
+  ({ toggleLoading, setActive = false }) =>
   (dispatch) => {
     toggleLoading();
     privateInstance
@@ -48,8 +52,8 @@ export const fetchUserSprints =
       .then(({ data }) => {
         dispatch(setStatus(STATUS.IDLE));
         dispatch(setSprints(data.data));
-        if (setValue) {
-          setValue(data?.data[0]._id);
+        if (setActive) {
+          dispatch(setActiveSprint(data?.data[0]._id));
         }
       })
       .catch((err) => {
@@ -59,14 +63,14 @@ export const fetchUserSprints =
   };
 
 export const deleteSprint =
-  ({ sprintId, toggleLoading, setValue, handleClose }) =>
+  ({ sprintId, toggleLoading, handleClose }) =>
   (dispatch) => {
     privateInstance
       .delete(`/api/sprint/${sprintId}`)
       .then(() => {
         handleClose();
         toast.success("Deleted successfully");
-        dispatch(fetchUserSprints({ toggleLoading, setValue }));
+        dispatch(fetchUserSprints({ toggleLoading, setActive: true }));
       })
       .catch((err) => {
         const message = err?.response?.data?.message;

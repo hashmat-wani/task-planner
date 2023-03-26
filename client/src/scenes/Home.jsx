@@ -4,7 +4,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Sprint from "../components/Sprint";
 import AddIcon from "@mui/icons-material/Add";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { fetchUserSprints } from "../state/sprintsSlice";
+import { fetchUserSprints, setActiveSprint } from "../state/sprintsSlice";
 import { loadingContext } from "../context/LoadingContext";
 import CreateSprint from "../components/CreateSprint";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -15,7 +15,7 @@ import { FlexBox } from "../components/FlexBox";
 import EditSprint from "../components/EditSprint";
 import DeleteSprint from "../components/DeleteSprint";
 
-const Modify = ({ sprintId, sprintName, setValue }) => {
+const Modify = ({ sprintId, sprintName }) => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const { sprints } = useSelector((state) => state.sprints, shallowEqual);
   const [open, setOpen] = useState(false);
@@ -44,9 +44,7 @@ const Modify = ({ sprintId, sprintName, setValue }) => {
   return (
     <Box ml="15px">
       <EditSprint {...{ open, setOpen, sprintName, id: sprintId }} />
-      <DeleteSprint
-        {...{ open: openDlt, setOpen: setOpenDlt, id: sprintId, setValue }}
-      />
+      <DeleteSprint {...{ open: openDlt, setOpen: setOpenDlt, id: sprintId }} />
       <IconButton onClick={handleOpenUserMenu}>
         <MoreVertIcon />
       </IconButton>
@@ -126,21 +124,22 @@ const Modify = ({ sprintId, sprintName, setValue }) => {
 };
 
 export default function Home() {
-  const [value, setValue] = useState(null);
-
   const [openCreateSprint, setOpenCreateSprint] = useState(false);
 
   const dispatch = useDispatch();
   const { toggleLoading } = useContext(loadingContext);
 
-  const { sprints } = useSelector((state) => state.sprints, shallowEqual);
+  const { sprints, activeSprint } = useSelector(
+    (state) => state.sprints,
+    shallowEqual
+  );
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    dispatch(setActiveSprint(newValue));
   };
 
   useEffect(() => {
-    dispatch(fetchUserSprints({ toggleLoading, setValue }));
+    dispatch(fetchUserSprints({ toggleLoading, setActive: true }));
   }, []);
 
   return (
@@ -152,8 +151,8 @@ export default function Home() {
       }}
     >
       <CreateSprint open={openCreateSprint} setOpen={setOpenCreateSprint} />
-      {value && (
-        <TabContext value={value}>
+      {activeSprint && (
+        <TabContext value={activeSprint}>
           <Box>
             <TabList
               onChange={handleChange}
@@ -168,13 +167,7 @@ export default function Home() {
                     p: "5px 15px",
                     textTransform: "none",
                   }}
-                  icon={
-                    <Modify
-                      sprintId={el._id}
-                      sprintName={el?.name}
-                      setValue={setValue}
-                    />
-                  }
+                  icon={<Modify sprintId={el._id} sprintName={el?.name} />}
                   iconPosition="end"
                   key={idx}
                   label={el.name}
@@ -190,9 +183,9 @@ export default function Home() {
               borderColor: "divider",
               padding: "10px",
             }}
-            value={value}
+            value={activeSprint}
           >
-            <Sprint sprintId={value} />
+            <Sprint sprintId={activeSprint} />
           </TabPanel>
         </TabContext>
       )}

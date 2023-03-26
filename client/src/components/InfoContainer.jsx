@@ -12,7 +12,6 @@ import { shades } from "../theme";
 const InfoContainer = ({ sprintId, setUserId }) => {
   const { sprints } = useSelector((state) => state.sprints, shallowEqual);
   const sprint = sprints.find((el) => el._id === sprintId);
-  // console.log(sprint);
   // const { tasks } = useSelector((state) => state.tasks, shallowEqual);
   // const sprintUsers = [
   //   ...tasks?.todo,
